@@ -1,44 +1,64 @@
 import threading
 import socket
+import customtkinter as ctk
 
-clients = []
+class Server(ctk.CTk):
+    def __init__(self):
+        super().__init__()
+        self.geometry("600x500")
+        self.title("CTk example")
+        self.grid_columnconfigure(0, weight=1)
+        self.clients = []
 
-def main():
-    server = socket.socket( socket.AF_INET, socket.SOCK_STREAM)
+        self.roomInput = ctk.CTkEntry(self, width=40)
+        self.roomInput.grid(row=0, column=1, padx=20, pady=(0, 20), sticky='ew')
 
-    try:
-        server.bind(('localhost', 7777))
-        server.listen()
-    except:
-        return print('\nNão foi possível criar o servidor\n')
+        self.roomBtn = ctk.CTkButton(self, text="Entrar", command=self.initRoom)
+        self.roomBtn.grid(row=1, column=1, padx=20, pady=(0, 20), sticky='ew')
 
-    while True:
-        client, address = server.accept()
-        print(address)
-        clients.append(client)
+    def initRoom(self):
 
-        thread = threading.Thread(target=treatement, args=[client])
-        thread.start()
+        server = socket.socket( socket.AF_INET, socket.SOCK_STREAM)
+        num = int(self.roomInput.get())
 
-def treatement(client):
-    while True:
         try:
-            msg = client.recv(2048)
-            broadcast(msg, client)
+            server.bind(('localhost', num))
+            server.listen()
+            print('aguardando...')
         except:
-            deleteClient(client)
-            break
+            return print('\nNão foi possível criar o servidor\n')
 
-def broadcast(msg, client):
-    for clientItem in clients:
-        if clientItem != client:
+        while True:
+            client, address = server.accept()
+            print(address)
+            self.clients.append(client)
+
+            thread = threading.Thread(target=self.treatement, args=[client])
+            thread.start()
+
+    def treatement(self, client):
+        while True:
             try:
-                clientItem.send(msg)
+                msg = client.recv(2048)
+                self.broadcast(msg, client)
             except:
-                deleteClient(clientItem)
+                self.deleteClient(client)
+                break
+
+    def broadcast(self, msg, client):
+        for clientItem in self.clients:
+            if clientItem != client:
+                try:
+                    clientItem.send(msg)
+                except:
+                    self.deleteClient(clientItem)
 
 
-def deleteClient(client):
-    clients.remove(client)
+    def deleteClient(self, client):
+        self.clients.remove(client)
 
-main()
+
+
+if __name__ == '__main__':
+    server = Server()
+    server.mainloop()
