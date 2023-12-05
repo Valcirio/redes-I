@@ -1,36 +1,30 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Projeto de Redes I
 
-## Getting Started
+## Sobre o Projeto
 
-First, run the development server:
+Foi desenvolvido um aplicativo de mensagens, onde o usuário pode criar uma sala de bate papo, enviar a porta para os múltiplos clientes, e conversarem através de um chat. 
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Bibliotecas
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- CustomTkiner
+- Socket
+- Thread
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Protocolo
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+![Diagrama](./protocolo.png)
 
-## Learn More
+1. O cliente se conecta ao Host e Porta, como é pedido no aplicativo
 
-To learn more about Next.js, take a look at the following resources:
+2. Retorna um feedback de conexão
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+    1. Caso seja conexão positiva:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+    Retorna o feedback positivo e abre uma outra aba, sendo ela o chat.
 
-## Deploy on Vercel
+    2. Em caso negativo:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+    Retorna apenas uma mensagem de feedback de conexão:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+3. O cliente pode então digitar e enviar ela para os clientes que estam conectados à mesma porta.
