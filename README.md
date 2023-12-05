@@ -28,3 +28,7 @@ Foi desenvolvido um aplicativo de mensagens, onde o usuário pode criar uma sala
 
 
 3. O cliente pode então digitar e enviar ela para os clientes que estam conectados à mesma porta.
+
+4. O Thread possui um papel importante para o servidor, pois permite múltiplos acessos de clientes
+
+4. O Thread possui um papel importante para o cliente, pois permite o envio das mensagens do servidor em paralelo com o envio de mensagens para ele.
