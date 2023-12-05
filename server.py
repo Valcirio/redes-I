@@ -3,10 +3,12 @@ import socket
 import customtkinter as ctk
 from CTkMessagebox import CTkMessagebox
 
+HOST = socket.gethostbyname(socket.gethostname())
+
 class Server(ctk.CTk):
     def __init__(self):
         super().__init__()
-        self.geometry("350x220")
+        self.geometry("350x250")
         self.title("CTk example")
         self.resizable(width=False, height=False)
         self.grid_columnconfigure(0, weight=1)
@@ -23,8 +25,12 @@ class Server(ctk.CTk):
 
         self.labelInfo = ctk.CTkLabel(self, text='A sala é uma porta, recebendo apenas números.')
         self.labelInfo.place(x=50, y=170)
+
         self.exInfo = ctk.CTkLabel(self, text='Ex: 7777.')
         self.exInfo.place(x=50, y=190)
+
+        self.hostInfo = ctk.CTkLabel(self, text='O host para acesso se encontra no prompt.')
+        self.hostInfo.place(x=50, y=210)
 
     def initRoom(self):
 
@@ -32,11 +38,10 @@ class Server(ctk.CTk):
         num = int(self.roomInput.get())
 
         try:
-            server.bind(('localhost', num))
+            server.bind((HOST, num))
             server.listen()
-            CTkMessagebox(message="Servidor criado com Sucesso!",
-                  icon="check", option_1="Fechar")
-            print('aguardando...')
+            print(f'Host de acesso: {HOST}')
+            print('aguardando usuários...')
         except:
             CTkMessagebox(title="Erro", message="Não foi possível criar o servidor.", icon="cancel")
             return print('\nNão foi possível criar o servidor\n')
@@ -69,8 +74,6 @@ class Server(ctk.CTk):
 
     def deleteClient(self, client):
         self.clients.remove(client)
-
-
 
 if __name__ == '__main__':
     server = Server()
